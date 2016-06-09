@@ -1,0 +1,3 @@
+# Bash code to be sourced
+summary="summary.yaml"
+cache_dir="/home/ubuntu/cache"

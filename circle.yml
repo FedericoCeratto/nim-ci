@@ -1,0 +1,39 @@
+
+dependencies:
+  cache_directories:
+    - "~/cache"
+  # pre:
+    # - wget http://http.us.debian.org/debian/pool/main/n/nim/nim_0.13.0-1_amd64.deb
+    # - sudo dpkg -i nim_0.13.0-1_amd64.deb
+    # - wget https://circle-artifacts.com/gh/FedericoCeratto/nimble/8/artifacts/0/tmp/circle-artifacts.I5rPyL7/nimble
+    # - chmod +x nimble
+
+  pre:
+    - >
+      if [ "$REBUILD_NIM" == "true" ]; then
+        ./rebuild_nim.sh
+      fi
+
+
+general:
+  artifacts:
+    - "output"
+
+  branches:
+    ignore:
+      - master
+
+test:
+  post:
+    - find ~ -name nimble
+    - find . -name nimble
+    - >
+      if [ "$RUN_NIMBLE_INSTALL_TESTS" == "true" ]; then
+        ./run_nimble_install_tests.sh
+      fi
+
+
+#notify:
+#  webhooks:
+#    # A list of hashes representing hooks. Only the url field is supported.
+#    - url: https://someurl.com/hooks/circle

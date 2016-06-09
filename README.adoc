@@ -1,0 +1,7 @@
+
+Run the following tests:
+- Checkout Nim, csources from the development repositories
+- Build them and run testinstall
+- Checkout Nimble and build it
+- Fetch the package.json list and try installing every package
+- Create a report

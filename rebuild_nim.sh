@@ -31,6 +31,7 @@ run_release_and_install_test() {
     # Success: save Nim in cache
     cd ..
     mkdir -p $cache_dir
+    rm $cache_dir/Nim -rf
     mv Nim $cache_dir/
     cd "$cache_dir/Nim"
 

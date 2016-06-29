@@ -44,17 +44,25 @@ div#footer {
 <p class="softtext">Nim install tests</p>
 
 <table id="installation_reports">
+<tr>
+ <th>Name/URL</th>
+ <th>Status/Output</th>
+ <th>Badge</th>
+ <th>Version</th>
+</tr>
 #for irep in items(installation_reports):
 <tr>
  <td>
   <a class="softtext" href="${irep.url}">${irep.title}</a>
  </td>
  <td class="${$irep.test_result}">
-   <a class="softtext" href="${irep.title}.html">${$irep.test_result}</a>
+   <a class="softtext" href="${irep.title}/nimdevel/output.html">${$irep.test_result}</a>
  </td>
  <td>
-   <img src="${$irep.title}.svg" alt="${irep.test_result}">
+   <img src="${$irep.title}/nimdevel/status.svg" alt="${irep.test_result}">
  </td>
+ <td>
+   <img src="${$irep.title}/version.svg" alt="${irep.version}">
  </td>
 </tr>
 #end for

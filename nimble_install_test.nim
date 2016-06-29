@@ -7,6 +7,7 @@
 
 from algorithm import sortedByIt
 import json
+import marshal
 import os
 import osproc
 import strutils
@@ -14,19 +15,26 @@ import streams
 import sequtils
 import times
 
+template getEnvOrDefault(key, default: string): TaintedString =
+  if existsEnv(key): getEnv(key) else: default
+
 const
-  nimble_binpath = "/home/ubuntu/cache/Nim/bin/nimble"
   template_path = "./templates"
   timeout = 60
   output_dir = "output"
 
-let version_badge_tpl = readFile template_path / "version-template-blue.svg"
+let
+  version_badge_tpl = readFile template_path / "version-template-blue.svg"
+  nimble_binpath = getEnvOrDefault("NIMBLE_BINPATH", "/home/ubuntu/cache/Nim/bin/nimble")
+  max_packages = getEnvOrDefault("MAX_PACKAGES", "-1").parseInt
 
 type
   Pkg = tuple[name, url: string]
   TestResult* {.pure.} = enum
     OK, FAIL, TIMEOUT
-  InstRep* = tuple[title, url: string, test_result: TestResult]
+  InstRep = object of RootObj
+    title, url, version: string
+    test_result: TestResult
 
 include "templates/nimble_install_test_report.tmpl"
 include "templates/nimble_install_test_output.tmpl"
@@ -90,6 +98,9 @@ proc main() =
   var installation_reports: seq[InstRep] = @[]
 
   for pkg in packages:
+    if max_packages != -1 and installation_reports.len == max_packages:
+        break
+
     let tmp_dir = "/tmp/nimble_install_test/" / pkg.name
     createDir(tmp_dir)
     echo "Processing ", $pkg.name
@@ -131,7 +142,8 @@ proc main() =
     let version = extract_version(output, pkg)
     write_version_badge(version, pkg)
 
-    let r: InstRep = (pkg.name, pkg.url, test_result)
+    let r = InstRep(title: pkg.name, url: pkg.url, test_result: test_result,
+      version: version)
     installation_reports.add r
     assert tmp_dir.len > 10
     removeDir(tmp_dir)
@@ -143,6 +155,12 @@ proc main() =
     page = generateHTMLPage(installation_reports, tstamp)
     ofn = output_dir / "nimble_install_report.html"
   ofn.writeout page
+  try:
+    writeout(output_dir / "nimble_install_report.json", $$installation_reports)
+  except:
+    echo getCurrentExceptionMsg()
+
+
 
 
 when isMainModule:

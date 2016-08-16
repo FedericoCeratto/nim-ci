@@ -27,6 +27,8 @@ let
   version_badge_tpl = readFile template_path / "version-template-blue.svg"
   nimble_binpath = getEnvOrDefault("NIMBLE_BINPATH", "/home/ubuntu/cache/Nim/bin/nimble")
   max_packages = getEnvOrDefault("MAX_PACKAGES", "-1").parseInt
+  nim_commit = getEnvOrDefault("NIM_COMMIT", "unknown")
+  nimble_commit = getEnvOrDefault("NIMBLE_COMMIT", "unknown")
 
 type
   Pkg = tuple[name, url: string]
@@ -152,7 +154,7 @@ proc main() =
   let tstamp = $getGmTime(getTime())
   echo "Writing output"
   let
-    page = generateHTMLPage(installation_reports, tstamp)
+    page = generateHTMLPage(installation_reports, tstamp, nim_commit, nimble_commit)
     ofn = output_dir / "nimble_install_report.html"
   ofn.writeout page
   try:

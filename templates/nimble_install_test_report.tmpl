@@ -1,14 +1,14 @@
 #? stdtmpl | standard
-#proc generateHTMLPage(installation_reports: seq[InstRep], creation_tstamp: string): string =
+#proc generateHTMLPage(installation_reports: seq[InstRep], creation_tstamp, nim_commit, nimble_commit: string): string =
 #  result = ""
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
-<head>
-  <title>Nimble install report</title>
-  <link rel="shortcut icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AAAAAAUAAAAF////AP///wD///8A////AP///wD///8A////AP///wD///8A////AAAAAAIAAABbAAAAlQAAAKIAAACbAAAAmwAAAKIAAACVAAAAWwAAAAL///8A////AP///wD///8A////AAAAABQAAADAAAAAYwAAAA3///8A////AP///wD///8AAAAADQAAAGMAAADAAAAAFP///wD///8A////AP///wAAAACdAAAAOv///wD///8A////AP///wD///8A////AP///wD///8AAAAAOgAAAJ3///8A////AP///wAAAAAnAAAAcP///wAAAAAoAAAASv///wD///8A////AP///wAAAABKAAAAKP///wAAAABwAAAAJ////wD///8AAAAAgQAAABwAAACIAAAAkAAAAJMAAACtAAAAFQAAABUAAACtAAAAkwAAAJAAAACIAAAAHAAAAIH///8A////AAAAAKQAAACrAAAAaP///wD///8AAAAARQAAANIAAADSAAAARf///wD///8AAAAAaAAAAKsAAACk////AAAAADMAAACcAAAAnQAAABj///8A////AP///wAAAAAYAAAAGP///wD///8A////AAAAABgAAACdAAAAnAAAADMAAAB1AAAAwwAAAP8AAADpAAAAsQAAAE4AAAAb////AP///wAAAAAbAAAATgAAALEAAADpAAAA/wAAAMMAAAB1AAAAtwAAAOkAAAD/AAAA/wAAAP8AAADvAAAA3gAAAN4AAADeAAAA3gAAAO8AAAD/AAAA/wAAAP8AAADpAAAAtwAAAGUAAAA/AAAA3wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAADfAAAAPwAAAGX///8A////AAAAAEgAAADtAAAAvwAAAL0AAADGAAAA7wAAAO8AAADGAAAAvQAAAL8AAADtAAAASP///wD///8A////AP///wD///8AAAAAO////wD///8A////AAAAAIcAAACH////AP///wD///8AAAAAO////wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A//8AAP//AAD4HwAA7/cAAN/7AAD//wAAoYUAAJ55AACf+QAAh+EAAAAAAADAAwAA4AcAAP5/AAD//wAA//8AAA=="/>
-</head>
-<body>
-<style>
+  <head>
+    <title>Nimble install report</title>
+    <link rel="shortcut icon" href="data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AAAAAAUAAAAF////AP///wD///8A////AP///wD///8A////AP///wD///8A////AAAAAAIAAABbAAAAlQAAAKIAAACbAAAAmwAAAKIAAACVAAAAWwAAAAL///8A////AP///wD///8A////AAAAABQAAADAAAAAYwAAAA3///8A////AP///wD///8AAAAADQAAAGMAAADAAAAAFP///wD///8A////AP///wAAAACdAAAAOv///wD///8A////AP///wD///8A////AP///wD///8AAAAAOgAAAJ3///8A////AP///wAAAAAnAAAAcP///wAAAAAoAAAASv///wD///8A////AP///wAAAABKAAAAKP///wAAAABwAAAAJ////wD///8AAAAAgQAAABwAAACIAAAAkAAAAJMAAACtAAAAFQAAABUAAACtAAAAkwAAAJAAAACIAAAAHAAAAIH///8A////AAAAAKQAAACrAAAAaP///wD///8AAAAARQAAANIAAADSAAAARf///wD///8AAAAAaAAAAKsAAACk////AAAAADMAAACcAAAAnQAAABj///8A////AP///wAAAAAYAAAAGP///wD///8A////AAAAABgAAACdAAAAnAAAADMAAAB1AAAAwwAAAP8AAADpAAAAsQAAAE4AAAAb////AP///wAAAAAbAAAATgAAALEAAADpAAAA/wAAAMMAAAB1AAAAtwAAAOkAAAD/AAAA/wAAAP8AAADvAAAA3gAAAN4AAADeAAAA3gAAAO8AAAD/AAAA/wAAAP8AAADpAAAAtwAAAGUAAAA/AAAA3wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAAD/AAAA/wAAAP8AAADfAAAAPwAAAGX///8A////AAAAAEgAAADtAAAAvwAAAL0AAADGAAAA7wAAAO8AAADGAAAAvQAAAL8AAADtAAAASP///wD///8A////AP///wD///8AAAAAO////wD///8A////AAAAAIcAAACH////AP///wD///8AAAAAO////wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A////AP///wD///8A//8AAP//AAD4HwAA7/cAAN/7AAD//wAAoYUAAJ55AACf+QAAh+EAAAAAAADAAwAA4AcAAP5/AAD//wAA//8AAA=="/>
+  </head>
+  <body>
+    <style>
 
 table#installation_reports tr td {
   font-size: 100%;
@@ -29,51 +29,64 @@ td.TIMEOUT {
 }
 
 a {
-    text-decoration: none;
-    margin: 0;
-    padding: 0;
+  text-decoration: none;
+  margin: 0;
+  padding: 0;
 }
 .softtext {
-    color: #777;
+  color: #777;
 }
 div#footer {
-    text-align: center;
+  text-align: center;
 }
-</style>
+    </style>
 
-<p class="softtext">Nim install tests</p>
-
-<table id="installation_reports">
-<tr>
- <th>Name/URL</th>
- <th>Status/Output</th>
- <th>Badge</th>
- <th>Version</th>
-</tr>
-#for irep in items(installation_reports):
-<tr>
- <td>
-  <a class="softtext" href="${irep.url}">${irep.title}</a>
- </td>
- <td class="${$irep.test_result}">
-   <a class="softtext" href="${irep.title}/nimdevel/output.html">${$irep.test_result}</a>
- </td>
- <td>
-   <img src="${$irep.title}/nimdevel/status.svg" alt="${irep.test_result}">
- </td>
- <td>
-   <img src="${$irep.title}/version.svg" alt="${irep.version}">
- </td>
-</tr>
-#end for
-</table>
-
-<div id="footer">
-  <p class="softtext">
+    <h3 class="softtext">Nim install tests</h3>
+    <p class="softtext">
+    Generated on ${creation_tstamp} <br/>
+    Nim version:
+    <a href="https://github.com/nim-lang/Nim/commit/${nim_commit}">
+      ${nim_commit}
+    </a>
     <br/>
-    Generated by <a href="">nimble_install_test</a> on ${creation_tstamp}
-  </p>
-</div>
+    Nimble version:
+    <a href="https://github.com/nim-lang/Nimble/commit/${nimble_commit}">
+      ${nimble_commit}
+    </a>
+    <br/>
+    </p>
 
-</body>
+    <table id="installation_reports">
+      <tr>
+        <th>Name/URL</th>
+        <th>Status/Output</th>
+        <th>Badge</th>
+        <th>Version</th>
+      </tr>
+      #for irep in items(installation_reports):
+      <tr>
+        <td>
+          <a class="softtext" href="${irep.url}">${irep.title}</a>
+        </td>
+        <td class="${$irep.test_result}">
+          <a class="softtext" href="${irep.title}/nimdevel/output.html">${$irep.test_result}</a>
+        </td>
+        <td>
+          <img src="${$irep.title}/nimdevel/status.svg" alt="${irep.test_result}">
+        </td>
+        <td>
+          <img src="${$irep.title}/version.svg" alt="${irep.version}">
+        </td>
+      </tr>
+      #end for
+    </table>
+
+    <div id="footer">
+      <p class="softtext">
+      <br/>
+      Generated by <a href="">nimble_install_test</a> on ${creation_tstamp}
+      </p>
+    </div>
+
+  </body>
 </html>

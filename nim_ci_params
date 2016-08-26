@@ -1,3 +1,6 @@
 # Bash code to be sourced
 summary="summary.yaml"
 cache_dir="/home/ubuntu/cache"
+artifacts_output_dir="/home/ubuntu/nim-ci/output"
+private_key_fname="/home/ubuntu/nim-ci/keys/private.key"
+unexpected_files="/home/ubuntu/nim-ci/output/unexpected_files.txt"

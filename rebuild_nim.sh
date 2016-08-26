@@ -9,9 +9,10 @@ set -uex
 
 source nim_ci_params
 
-unexpected_files="../unexpected_files.txt"
 
 run_release_and_install_test() {
+
+    mkdir -p "$artifacts_output_dir"
 
     echo -e "\nCloning Nim repo\n"
     git clone -q --depth 1 https://github.com/nim-lang/Nim.git
@@ -49,6 +50,24 @@ run_release_and_install_test() {
     #cp ./csources/makefile build/
     ./koch xz
 
+    echo -e "\nPublishing tarball\n"
+    tarball_fname=$(ls $cache_dir/Nim/build/nim*tar.xz)
+    echo $tarball_fname > "$artifacts_output_dir"/release_tarball_name
+    cp $tarball_fname "$artifacts_output_dir"
+
+    echo -e "\nSigning tarball\n"
+    set +x
+    if [ -n "$GPG_BUILD_SIGN_PASSPHRASE" ]; then
+        # user id: "Nim CircleCI builder"
+        gpg --yes --batch --import $private_key_fname
+        gpg --detach-sig --no-use-agent --yes --batch \
+            --passphrase=$GPG_BUILD_SIGN_PASSPHRASE \
+            --sign --armor $tarball_fname
+        cp $tarball_fname.asc "$artifacts_output_dir"
+
+    fi
+    set -x
+
     echo -e "\nLooking for unexpected files in the tarball\n"
     rm -f $unexpected_files
     touch $unexpected_files
@@ -62,6 +81,7 @@ run_release_and_install_test() {
         echo "ERROR: Unexpected files found:"
         cat $unexpected_files
     fi
+
 
 #    echo -e "\nRunning testinstall \n"
 #    ./koch testinstall

@@ -5,7 +5,7 @@
 # Copyright 2016 Federico Ceratto <federico.ceratto@gmail.com>
 # Released under GPLv3 License, see LICENSE file
 
-set -uex
+set -ue
 
 source nim_ci_params
 
@@ -28,6 +28,12 @@ run_release_and_install_test() {
 
     echo -e "\nRunning koch boot\n"
     ./koch boot -d:release
+
+    echo -e "\nRunning koch web\n"
+    ./koch web
+    # Copy koch web outputs into artifact dir
+    cp -a doc "$artifacts_output_dir"
+    cp -a web "$artifacts_output_dir"
 
     # Success: save Nim in cache
     cd ..

@@ -23,6 +23,9 @@ run_release_and_install_test() {
     echo -e "\nBuilding csources\n"
     ( cd csources && sh build.sh )
 
+    # Needed by ./koch csources and doc tests
+    PATH=$PATH:$(pwd)/bin
+
     echo -e "\nBuilding koch\n"
     bin/nim c koch
 
@@ -41,9 +44,6 @@ run_release_and_install_test() {
     rm $cache_dir/Nim -rf
     mv Nim $cache_dir/
     cd "$cache_dir/Nim"
-
-    # Needed by ./koch csources
-    PATH=$PATH:$(pwd)/bin
 
     echo -e "\nRebuilding csources\n"
     mv csources csources.old

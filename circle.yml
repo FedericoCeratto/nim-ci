@@ -13,6 +13,7 @@ dependencies:
     # - chmod +x nimble
 
   pre:
+    - sudo apt-get update; sudo apt-get install libsfml-dev libssl-dev libssl1.0.0
     - gem install package_cloud
     - >
       if [ "$REBUILD_NIM" == "true" ]; then

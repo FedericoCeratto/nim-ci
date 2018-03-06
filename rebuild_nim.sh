@@ -18,22 +18,31 @@ run_release_and_install_test() {
     git clone -q --depth 1 https://github.com/nim-lang/Nim.git
     echo -e "\nCloning csources\n"
     cd Nim
-    git clone -q --depth 1 https://github.com/nim-lang/csources
+    git clone --depth 1 https://github.com/nim-lang/csources.git
 
     echo -e "\nBuilding csources\n"
     ( cd csources && sh build.sh )
-
-    # Needed by ./koch csources and doc tests
-    PATH=$PATH:$(pwd)/bin
-
+    sed -i -e 's,cc = gcc,cc = clang,' config/nim.cfg
+    export PATH=$(pwd)/bin${PATH:+:$PATH}
     echo -e "\nBuilding koch\n"
-    bin/nim c koch
-
+    nim c koch
     echo -e "\nRunning koch boot\n"
+    ./koch boot
     ./koch boot -d:release
-
+    ./koch nimble
+    nim e tests/test_nimscript.nims
+    nimble install zip -y
+    nimble install opengl
+    nimble install sdl1
+    nimble install jester@#head
+    nimble install niminst
+    nim c --taintMode:on -d:nimCoroutines tests/testament/tester
+    tests/testament/tester --pedantic all -d:nimCoroutines
     echo -e "\nRunning koch web\n"
     ./koch web
+    ./koch csource
+    ./koch nimsuggest
+
     # Copy koch web outputs into artifact dir
     cp -a doc "$artifacts_output_dir"
     cp -a web "$artifacts_output_dir"
@@ -50,10 +59,6 @@ run_release_and_install_test() {
     ./koch csources -d:release
 
     echo -e "\nBuilding release tarball\n"
-    #touch build/build.bat
-    #touch build/build64.bat
-    #cp ./csources/build.sh build/
-    #cp ./csources/makefile build/
     ./koch xz
 
     echo -e "\nPublishing tarball\n"

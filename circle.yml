@@ -1,4 +1,8 @@
 
+machine:
+  node:
+    version: 8.2.0
+
 dependencies:
   cache_directories:
     - "~/cache"
@@ -9,6 +13,7 @@ dependencies:
     # - chmod +x nimble
 
   pre:
+    - gem install package_cloud
     - >
       if [ "$REBUILD_NIM" == "true" ]; then
         ./rebuild_nim.sh

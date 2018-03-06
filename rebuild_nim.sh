@@ -22,7 +22,6 @@ run_release_and_install_test() {
 
     echo -e "\nBuilding csources\n"
     ( cd csources && sh build.sh )
-    sed -i -e 's,cc = gcc,cc = clang,' config/nim.cfg
     export PATH=$(pwd)/bin${PATH:+:$PATH}
     echo -e "\nBuilding koch\n"
     nim c koch
